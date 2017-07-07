@@ -1,0 +1,59 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Gráfico dos Progressos</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb">
+        <div class="row">
+
+          <div class="col-lg-6 col-sm-6">
+            <li><%= link_to "Projeto", project_path(@project) %></li>
+            <li><%= link_to "Progressos", progresses_path(project: @project) %></li>
+            <li class="active">Gráfico de C&A</li>
+          </div>
+
+          <div class="col-lg-6 col-sm-6">
+
+            <div class="progress progress-striped active" style="margin-bottom: 0" data-toggle="tooltip" data-placement="bottom" title="Completude do projeto">
+              <div class="progress-bar" style="width: <%= @project.progresses.last.completeness %>%">
+                <%= "#{@project.progresses.last.completeness}%" %>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </ul>
+
+      <br>
+
+      <div class="chart">
+
+        <%= line_chart [
+          {name: "Completude",
+           data: @project.progresses
+                 .order(:id).map { |p| [[p.sprint.description + " (#{p.sprint.semester})"], p.completeness] }
+          },
+          {name: "Avanço",
+           data: @project.progresses
+                 .order(:id).map { |p| [[p.sprint.description + " (#{p.sprint.semester})"], p.advance] }
+          }
+          ], title: "#{@project.description}", xtitle: 'Sprints', ytitle: 'Completude/Avanço (%)' %>
+
+      </div>
+
+      <br>
+
+      <%= link_to "Download PDF", progress_report_pdf_path(project_id: @project, format: "pdf"), target: "_blank", class: "btn btn-info" %> |
+
+      <%= link_to t('buttons.back'), progresses_path(project: @project), class: "btn btn-success" %>
+
+    </div>
+  </div>
+</div>

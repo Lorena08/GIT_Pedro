@@ -1,0 +1,18 @@
+<div class="form-group nested-fields">
+  <label class="col-lg-3 control-label">
+      Nova completude:
+  </label>
+
+  <div class="col-lg-5">
+
+    <div class="col-lg-6 field">
+      <%= f.number_field :completeness, min: 0, max: 100, class: 'form-control' %>
+    </div>
+
+    <div class="col-lg-6">
+      <%= link_to_remove_association('Remover', f, class: 'btn btn-danger')%>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,63 @@
+<div class="col-lg-3">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <ul class="nav nav-pills nav-stacked">
+
+        <li class=<%= aside_bar_active('home') %>>
+          <%= link_to t('buttons.home'), root_path %>
+        </li>
+
+        <% if current_user_total? %>
+          <li class=<%= aside_bar_active('user_profile') %>>
+            <%= link_to "Usuários", user_profile_index_path %>
+          </li>
+        <% end %>
+
+        <li class=<%= aside_bar_active(params[:controller] == 'team_users' ? 'team_users' : 'teams') %>>
+          <%= link_to "Equipes", teams_path %>
+        </li>
+
+        <% if ['projects', 'sprints', 'activities', 'progresses',
+               'macro_activities'].include? params[:controller] %>
+          <% path = params[:controller] %>
+        <% else %>
+          <% path = 'projects' %>
+        <% end %>
+
+        <li class=<%= aside_bar_active("#{path}") %>>
+          <%= link_to projects_path do %>
+            Projetos
+          <% end %>
+        </li>
+
+        <% if current_user_total? %>
+          <hr style="border-top-color: dimgray">
+        <% end %>
+
+        <% if can? :manage, Label %>
+          <li class=<%= aside_bar_active('labels') %>>
+            <%= link_to "Rótulos", labels_path %>
+          </li>
+        <% end %>
+
+        <% if can? :manage, Color %>
+          <li class=<%= aside_bar_active('colors') %>>
+            <%= link_to "Cores", colors_path %>
+          </li>
+        <% end %>
+
+        <% if can? :manage, Status %>
+          <li class=<%= aside_bar_active('statuses') %>>
+            <%= link_to "Status", statuses_path %>
+          </li>
+        <% end %>
+
+        <hr style="border-top-color: dimgray">
+        <li class="">
+          <a>Relatórios</a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização do Projeto</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb">
+        <div class="row">
+
+          <div class="col-lg-5 col-sm-5">
+            <li><%= link_to "Projetos", projects_path %></li>
+          </div>
+
+          <%= render partial: 'progresses/shared/progress_bar' %>
+
+          <%= render partial: 'progresses/shared/dropdown_progresses' %>
+
+        </div>
+      </ul>
+
+      <div class="row">
+        <div class="col-lg-6 lg-sm-6">
+          <div class="pull-left">
+            <span class="title">Descrição:</span> <%= @project.description %> <br>
+            <span class="title">Equipe:</span> <%= @project.team.description %> <br>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6 lg-sm-6">
+          <div class="pull-right">
+          </div>
+        </div>
+      </div>
+
+      <%= render partial: 'projects/shared/sprints_list' %> <br><br>
+
+      <%= render partial: 'projects/shared/macro_activities_list' %>
+
+      <br><br>
+
+
+      <% if can? :update, Project %>
+        <td width="100" align="center">
+          <%= link_to t('buttons.edit'), edit_project_path(@project), class: "btn btn-primary" %> |
+        </td>
+      <% end %>
+
+      <%= link_to t('buttons.back'), projects_path, class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

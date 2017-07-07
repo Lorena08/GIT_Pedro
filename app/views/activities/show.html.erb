@@ -1,0 +1,70 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização da atividade</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb">
+        <div class="row">
+
+          <div class="col-lg-5 col-sm-5">
+            <li><%= link_to "Projeto", project_path(@activity.project) %></li>
+            <li class="active"><%= link_to "Sprint", sprint_path(@activity.sprint, project: @activity.project) %></li>
+            <li class="active">Atividade</li>
+          </div>
+
+          <div class="col-lg-6 col-sm-6">
+
+            <div class="progress progress-striped active" style="margin-bottom: 0" data-toggle="tooltip" data-placement="bottom" title="Completude do projeto">
+              <div class="progress-bar" style="width: <%= @activity.project.progresses.last.completeness %>%">
+                <%= "#{@activity.project.progresses.last.completeness}%" %>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-1 col-sm-1">
+            <ul class="nav nav-pills pull-right">
+              <li class="dropdown">
+                <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="padding: 0 15px">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" style="left: auto; right: 0;">
+                  <li><%= link_to "Novo", user_profile_path(current_user) %></li>
+                  <li>
+                    <%= link_to "Editar", destroy_user_session_path, method: :delete %>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </ul>
+
+      <span class="title">Descrição:</span> <%= @activity.description %> <br>
+      <% if current_user_total? %>
+        <span class="title">Usuário:</span> <%= @activity.user.user_profile.name %> <br>
+      <% end %>
+      <span class="title">Pontos planejados:</span> <%= @activity.pontos_cadastrados %> <br>
+      <span class="title">Pontos realizados:</span> <%= @activity.pontos_atualizados %> <br>
+      <span class="title">Status:</span> <%= @activity.status.blank? ? '-' : @activity.status.description %> <br>
+      <span class="title">Rótulo:</span> <%= @activity.label.blank? ? '-' : @activity.label.description %> <br>
+      <span class="title">Projeto: </span> <%= @activity.project.description %> <br>
+      <span class="title">Sprint:</span> <%= @activity.sprint.blank? ? '-' : "#{@activity.sprint.description} (#{@activity.sprint.semester})" %>
+
+      <br><br><br>
+
+      <%= link_to t('buttons.edit'), edit_activity_path(@activity), class: "btn btn-primary" %> |
+
+      <%= link_to t('buttons.back'), sprint_path(@activity.sprint.id, project: @activity.project.id), class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

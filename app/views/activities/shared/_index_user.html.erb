@@ -1,0 +1,78 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Lista de atividades</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+        <table class="table table-striped table-hover ">
+
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Pontos cadastrados</th>
+              <th>Status</th>
+              <th>Rótulo</th>
+              <th>Sprint</th>
+              <th>Projeto</th>
+              <th colspan="3"></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% @activities.each do |activity| %>
+              <tr>
+
+                <td>
+                  <%= truncate(activity.description, length: 25) %>
+                </td>
+
+                <td>
+                  <%= activity.pontos_cadastrados %>
+                </td>
+
+                <td>
+                  <%= activity.status.blank? ? '-' : activity.status.description %>
+                </td>
+
+                <td>
+                  <%= activity.label.blank? ? '-' : activity.label.description %>
+                </td>
+
+                <td>
+                  <%= truncate(activity.sprint.description, length: 20) %>
+                </td>
+
+                <td>
+                  <%= truncate(activity.project.description, length: 20) %>
+                </td>
+
+                <td>
+                  <%= link_to "Visualizar", activity_path(activity, project: activity.project, sprint: activity.sprint) %>
+                </td>
+
+                <td>
+                  <%= link_to t('buttons.edit'), edit_activity_path(activity) %>
+                </td>
+
+                <td>
+                  <%= link_to t('buttons.destroy'), activity_path(activity), method: :delete, data: { confirm: t('messages.confirm') } %>
+                </td>
+
+              </tr>
+            <% end %>
+          </tbody>
+
+        </table>
+
+      <center><%= paginate @activities %></center>
+
+      <%= link_to t('buttons.new'), new_activity_path, class: "btn btn-primary" %>
+
+    </div>
+  </div>
+</div>
+

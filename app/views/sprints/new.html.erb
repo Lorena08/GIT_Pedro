@@ -1,0 +1,82 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Criar Sprint</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <%= form_for(@sprint, html: {class: 'form-horizontal'}) do |f| %>
+
+        <%= hidden_field_tag("project", @project) %>
+
+        <% if @sprint.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <p><h5> <%= "Existe(m) #{pluralize(@sprint.errors.count, 'erro(s)')} no formulário:" %></h5></p>
+              <ul>
+              <% @sprint.errors.full_messages.each do |message| %>
+                <li><h6><%= message %></h6></li>
+              <% end %>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <fieldset>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Descrição: </label>
+            <div class="col-lg-8">
+              <%= f.text_field :description, class: 'form-control', onfocusout: "checkIfValidated(this)" %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Semestre:</label>
+            <div class="col-lg-2">
+              <%= f.text_field :semester, class: 'form-control', placeholder: "(ex.: #{Date.today.year.to_s.last(2)}.1)", onfocusout: "checkIfValidated(this)" %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+
+              <div class="col-lg-12 col-sm-4 sprint-date">
+                <label class="col-lg-2 col-sm-4 control-label">Início: </label>
+                <div class="col-lg-2 col-sm-8">
+                  <%= f.text_field :inicio, value: l(Date.today), class: 'form-control datepicker', onfocusout: "checkIfValidated(this)", onchange: 'setSprintFim(this.value)', readonly: true %>
+                </div>
+              </div>
+
+              <div class="col-lg-12 col-sm-4">
+                <label class="col-lg-2 col-sm-4 control-label">Fim:</label>
+                <div class="col-lg-2 col-sm-8">
+                  <%= f.text_field :fim, value: l(Date.today + 7), class: 'form-control datepicker', onfocusout: "checkIfValidated(this)", readonly: true %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <br>
+
+          <div class="form-group">
+            <div class="col-lg-8 col-lg-offset-2">
+              <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+              <%= link_to t('buttons.back'), project_path(@project), class: "btn btn-success" %>
+            </div>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<%= render partial: 'sprints/shared/datepicker_call' %>

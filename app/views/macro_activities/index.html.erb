@@ -1,0 +1,71 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Listando Macro Atividades</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb" style="background-color: #3e3b3b;">
+        <li><%= link_to "Projetos", projects_path %></li>
+        <li class="active">Macro atividade</li>
+      </ul>
+
+      <% @projects.each do |project| %>
+
+        <span class="title">Projeto:</span> <%= project.description %> <br>
+
+        <% project.macro_activities.each do |ma| %>
+
+          <div class="chart">
+
+            <%= line_chart [
+              {name: "Completude",
+               data: ma.progresses.order(:id).map { |p| [p.id,
+                                              p.completeness] }
+              },
+              {name: "Avanço",
+               data: ma.progresses.order(:id).map { |p| [p.id,
+                                              p.advance] }
+              }
+              ], title: "Macro Atividade: #{ma.description}", xtitle: 'Progresso', ytitle: 'Completude/Avanço (%)' %>
+
+          </div>
+
+          <td width="100" align="center">
+            <%= link_to "Visualizar", macro_activity_path(ma), class: "btn btn-default" %>
+          </td>
+
+          <% if can? :update, MacroActivity %>
+            | <td width="100" align="center">
+              <%= link_to t('buttons.edit'), edit_macro_activity_path(ma), class: "btn btn-primary" %> |
+            </td>
+          <% end %>
+
+          <% if can? :destroy, MacroActivity %>
+            <td width="100">
+              <%= link_to t('buttons.destroy'), macro_activity_path(ma), method: :delete, data: { confirm: t('messages.confirm') }, class: "btn btn-danger" %>
+            </td>
+          <% end %>
+
+          <br><br>
+
+        <% end %>
+
+        <% unless @projects.last == project %>
+          <hr style="border-top-color: dimgray;">
+        <% end %>
+
+      <% end %>
+
+      <br><br><br><br>
+
+      <%= link_to t('buttons.back'), projects_path, class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Lista de equipes</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <table class="table table-striped table-hover ">
+
+        <thead>
+          <tr>
+            <th><%= @teams.model.human_attribute_name("description") %></th>
+
+            <% if current_user_total? %>
+              <th colspan="3"></th>
+            <% else %>
+              <th></th>
+            <% end %>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @teams.each do |team| %>
+            <tr>
+              <td>
+                <%= team.description %>
+              </td>
+
+              <td width="100" align="center">
+                <%= link_to "Visualizar", team_path(team) %>
+              </td>
+
+              <% if can? :update, Team %>
+                <td width="100" align="center">
+                  <%= link_to t('buttons.edit'), edit_team_path(team) %>
+                </td>
+              <% end %>
+
+              <% if can? :destroy, Team %>
+                <td width="100" align="center">
+                  <%= link_to t('buttons.destroy'), team, method: :delete, data: { confirm: t('messages.confirm') } %>
+                </td>
+                <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+
+      <center><%= paginate @teams %></center>
+
+      <% if can? :create, Team %>
+        <%= link_to t('buttons.new'), new_team_path, class: "btn btn-primary" %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

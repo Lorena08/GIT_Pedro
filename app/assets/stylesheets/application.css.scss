@@ -1,0 +1,62 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require scaffolds
+ *= require bootstrap
+ *= require bootstrap-datepicker3
+ *= require_tree .
+ *= require_self
+ */
+
+@import 'bootstrap/glyphicons';
+
+.outer {
+    display: flex;
+}
+.inner {
+    align-self: center;
+    margin: auto;
+}
+.title {
+    font-size: 14pt;
+    color: white;
+}
+
+.paperclip-div {
+    border-radius: 100px; /* deixar borda arredondada */
+    box-shadow: 0 0 10px black; /* sombreamento da imagem */
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+ }
+.paperclip-img {
+    align-self: center;
+    height: 100px;
+}
+
+.datepicker tfoot tr th:hover,
+.datepicker table tr td.day:hover, .datepicker table tr td.focused,
+.datepicker .datepicker-switch:hover, .datepicker .prev:hover,
+.datepicker .next:hover, .datepicker tfoot tr th:hover {
+    background: #3e3b3b;
+}
+
+/* Kaminari */
+.pagination>li>a {
+    background-color: #181818 !important;
+    border-color: #3e3b3b !important;
+}
+.pagination>.active>a {
+    background-color: #2a9fd6 !important;
+    border-color: #2a9fd6 !important;
+}

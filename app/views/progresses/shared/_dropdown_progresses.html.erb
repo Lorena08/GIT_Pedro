@@ -1,0 +1,24 @@
+<div class="col-lg-1 col-sm-1">
+  <ul class="nav nav-pills pull-right">
+    <li class="dropdown">
+      <a class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="padding: 0 15px">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" style="left: auto; right: 0;">
+        <li>
+          <%= link_to "Visualizar", progresses_path(project: @project) %>
+        </li>
+        <% if can? :create, Progress %>
+          <li>
+            <%= link_to "Novo", new_progress_path(project: @project) %>
+          </li>
+        <% end %>
+        <% if can? :update, Progress %>
+          <li>
+            <%= link_to "Editar", edit_progress_path(project: @project) %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  </ul>
+</div>

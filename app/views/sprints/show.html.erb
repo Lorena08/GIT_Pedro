@@ -1,0 +1,274 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização da Sprint</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb">
+        <div class="row">
+
+          <div class="col-lg-5 col-sm-5">
+            <li><%= link_to "Projeto", project_path(@project) %></li>
+            <li class="active">Sprint</li>
+          </div>
+
+          <%= render partial: 'progresses/shared/progress_bar' %>
+
+          <%= render partial: 'progresses/shared/dropdown_progresses' %>
+
+        </div>
+      </ul>
+
+      <span class="title">Descrição:</span> <%= @sprint.description %> <br>
+      <span class="title">Semestre:</span> <%= @sprint.semester %> <br>
+      <span class="title">Inicio:</span> <%=  l(@sprint.inicio) %> <br>
+      <span class="title">Fim:</span> <%=  l(@sprint.fim) %> <br>
+
+      <% pontos_cadastrados = 0 %>
+      <% pontos_atualizados = 0 %>
+
+      <% if @activities.present? %>
+        <% @activities.each do |activity| %>
+          <% if current_user_total? %>
+
+              <% pontos_cadastrados += activity.pontos_cadastrados %>
+
+              <% if activity.status.description == 'Validado' &&
+                    activity.pontos_atualizados.present? %>
+                <% pontos_atualizados += activity.pontos_atualizados %>
+              <% end %>
+
+          <% else %>
+
+            <% if activity.user_id == current_user.id %>
+
+              <% pontos_cadastrados += activity.pontos_cadastrados %>
+
+              <% if activity.status.description == 'Validado' &&
+                    activity.pontos_atualizados.present? %>
+                <% pontos_atualizados += activity.pontos_atualizados %>
+              <% end %>
+
+            <% end %>
+
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <span class="title">Pontos planejados:</span> <%= pontos_cadastrados %>
+      <br>
+
+      <span class="title">Pontos realizados:</span> <%= pontos_atualizados %><br><br>
+
+      <span class="title">Semanas:</span> <br><br>
+
+      <table class="table table-striped table-hover ">
+
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Início</th>
+            <th>Fim</th>
+            <th>Horas realizadas</th>
+            <th>Horas esperadas</th>
+            <% if current_user_total? %>
+              <th></th>
+            <% end %>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <!-- Ordernar pelo usuário -->
+          <% @sprint.weeks.each do |week| %>
+
+            <tr <%= "class=current_period" if Date.today.between?(week.start_w, week.end_w) %>>
+
+              <td>
+                <%= week.description %>
+              </td>
+
+              <td>
+                <%= l(week.start_w) %>
+              </td>
+
+              <td>
+                <%= l(week.end_w) %>
+              </td>
+
+              <% if week.hours_registries.where(user_id: current_user.id, project_id: @project.id).present? %>
+                <% hours_performed = week.hours_registries.where(
+                                        user_id: current_user.id,
+                                        project_id: @project.id
+                                      ).first.hours_performed %>
+                <% hours_performed = time_diff(0, hours_performed) %>
+              <% else %>
+                <% hours_performed = '-' %>
+              <% end %>
+
+              <td>
+                <%= hours_performed %>
+              </td>
+
+              <td>
+                <%= "#{week.expected_hours}h" %>
+              </td>
+
+              <% if can? :update, Week %>
+                <td width="70" align="center">
+                  <%= link_to t('buttons.edit'), edit_week_path(week, project: @project, hours_registry: week.hours_registries.where(
+                                                user_id: current_user.id,
+                                                project_id: @project.id
+                                              ).first) %>
+                </td>
+              <% end %>
+            </tr>
+
+          <% end %>
+
+        </tbody>
+
+      </table>
+
+
+      <hr style="border-top-color: dimgray;">
+      <span class="title">Atividades:</span> <br><br>
+
+      <table class="table table-striped table-hover ">
+
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Pontos planejados</th>
+            <th>Pontos realizados</th>
+            <% if current_user_total? %>
+              <th>Usuário</th>
+            <% end %>
+            <th>Status / Rótulo</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <% if @activities.present? %>
+
+            <!-- Ordernar pelo usuário -->
+            <% @activities.each do |activity| %>
+
+              <% if current_user_total? %>
+
+                <tr>
+
+                  <td>
+                    <%= truncate(activity.description, length: 25) %>
+                  </td>
+
+                  <td>
+                    <%= activity.pontos_cadastrados %>
+                  </td>
+
+                  <td>
+                    <%= activity.pontos_atualizados.blank? ? '-' : activity.pontos_atualizados %>
+                  </td>
+
+                  <td>
+                    <%= activity.user.user_profile.name %>
+                  </td>
+
+                  <!-- Rótulo e Status -->
+                  <td>
+                    <span class="label label-default" style="margin-right: 10px; background-color: <%= activity.status.blank? ? '-' : activity.status.color.description %> !important">
+                      <%= activity.status.blank? ? '-' : activity.status.description %>
+                    </span>
+                    <span class="label label-default" style="background-color: <%= activity.label.blank? ? '-' : activity.label.color.description %> !important">
+                      <%= activity.label.blank? ? '-' : activity.label.description %>
+                    </span>
+                  </td>
+                  <!-- / Rótulo e Status -->
+
+                  <td width="70" align="center">
+                    <%= link_to "Visualizar", activity_path(activity, project: @project, sprint: @sprint) %>
+                  </td>
+
+                  <td width="70" align="center">
+                    <%= link_to t('buttons.edit'), edit_activity_path(activity) %>
+                  </td>
+
+                  <td width="70" align="center">
+                    <%= link_to t('buttons.destroy'), activity_path(activity), method: :delete, data: { confirm: t('messages.confirm') } %>
+                  </td>
+                </tr>
+
+              <% else %>
+
+                <% if activity.user_id == current_user.id %>
+                  <tr>
+
+                    <td>
+                      <%= truncate(activity.description, length: 25) %>
+                    </td>
+
+                    <td>
+                      <%= activity.pontos_cadastrados %>
+                    </td>
+
+                    <td>
+                      <%= activity.pontos_atualizados.blank? ? '-' : activity.pontos_atualizados %>
+                    </td>
+
+                    <!-- Rótulo e Status -->
+                    <td>
+                      <span class="label label-default" style="margin-right: 10px; background-color: <%= activity.status.blank? ? '-' : activity.status.color.description %> !important">
+                        <%= activity.status.blank? ? '-' : activity.status.description %>
+                      </span>
+                      <span class="label label-default" style="background-color: <%= activity.label.blank? ? '-' : activity.label.color.description %> !important">
+                        <%= activity.label.blank? ? '-' : activity.label.description %>
+                      </span>
+                    </td>
+                    <!-- / Rótulo e Status -->
+
+                    <td width="70" align="center">
+                      <%= link_to "Visualizar", activity_path(activity, project: @project, sprint: @sprint) %>
+                    </td>
+
+                    <td width="70" align="center">
+                      <%= link_to t('buttons.edit'), edit_activity_path(activity) %>
+                    </td>
+
+                    <td width="70" align="center">
+                      <%= link_to t('buttons.destroy'), activity_path(activity), method: :delete, data: { confirm: t('messages.confirm') } %>
+                    </td>
+
+                  </tr>
+                <% end %>
+
+              <% end %>
+            <% end %>
+          <% end %>
+
+        </tbody>
+
+      </table>
+
+      <%= link_to t('buttons.new'), new_activity_path(project: @project.id, sprint: @sprint.id), class: "btn btn-primary" %>
+
+      <center><%= paginate @activities %></center>
+
+      <br><br>
+
+      <% if can? :update, Sprint %>
+        <%= link_to t('buttons.edit'), edit_sprint_path(@sprint, project: @project), class: "btn btn-primary" %> |
+      <% end %>
+
+      <%= link_to t('buttons.back'), project_path(@project), class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

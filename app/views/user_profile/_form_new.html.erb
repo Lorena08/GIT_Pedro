@@ -1,0 +1,101 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Criar usuário</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <%= form_for(@user, url: user_profile_index_path, html: { class: 'form-horizontal', multipart: true }) do |f| %>
+
+        <% if @user.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <p>
+                <h5> Existe(m) <%= @user.errors.count %> erro(s) no formulário:</h5>
+              </p>
+              <ul>
+                <% @user.errors.full_messages.each do |message| %>
+                    <li><h6><%= message %></h6></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <fieldset>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">E-mail: </label>
+            <div class="col-lg-7">
+              <%= f.email_field :email, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Senha: </label>
+            <div class="col-lg-7">
+              <%= f.password_field :password, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Confirme sua senha: </label>
+            <div class="col-lg-7">
+              <%= f.password_field :password_confirmation, class: 'form-control' %>
+            </div>
+          </div>
+
+          <%= f.fields_for :user_profile do |user_profile| %>
+
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Matrícula: </label>
+              <div class="col-lg-7">
+                <%= user_profile.text_field :student_number, class: 'form-control' %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Nome: </label>
+              <div class="col-lg-7">
+                <%= user_profile.text_field :name, class: 'form-control' %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-lg-3 control-label">Acesso: </label>
+              <div class="col-lg-3">
+                <%= user_profile.select(:role,
+                                        ['Total', 'Parcial'],
+                                        {},
+                                        { class: 'form-control'}) %>
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-3 control-label">Foto de perfil: </label>
+                <div class="col-lg-7">
+                  <div class="well">
+                    <%= user_profile.file_field :picture %>
+                  </div>
+                </div>
+            </div>
+
+          <% end %>
+
+          <div class="col-lg-7 col-lg-offset-3">
+            <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+            <%= link_to t('buttons.back'), user_profile_index_path, class: "btn btn-success"%>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,32 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12">
+
+      <h1>BOPE</h1>
+
+      <!-- Dropdown -->
+      <ul class="nav nav-pills pull-right">
+        <li style="padding: 11px; font-size: 12pt;">
+            Seja bem-vindo, <%= current_user.user_profile.name %>!
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle btn btn-default" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-user"></span> <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><%= link_to "Perfil", user_profile_path(current_user) %></li>
+            <li>
+              <%= link_to 'Sair', destroy_user_session_path, method: :delete %>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <!-- / Dropdown -->
+
+      <p class="lead">
+        [ Aqui seria uma frase de introdução/descrição do sistema ]
+      </p>
+
+    </div>
+  </div>
+</div>

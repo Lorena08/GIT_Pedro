@@ -1,0 +1,17 @@
+<div class="form-group">
+  <%= hidden_field_tag  "sprint_ids[]" %>
+
+  <div class="col-lg-6 col-lg-offset-2">
+    <%= select(nil, "sprint_ids[]",
+               Sprint.all.collect {|s| [ truncate(s.description, length: 55), s.id ] },
+               {include_blank: '-- Selecione um sprint --'},
+               {onchange: 'sprint_ids(this)', class: "form-control"}) %>
+  </div>
+
+  <div class="col-lg-2">
+    <a onclick='removeSelect(this)' class="btn btn-default">Remover</a>
+  </div>
+
+</div>
+
+<span id="add"></span>

@@ -1,0 +1,100 @@
+<hr style="border-top-color: dimgray;">
+<span class="title">Sprints:</span> <br><br>
+
+<table class="table table-striped table-hover ">
+
+  <thead>
+    <tr>
+
+      <th>Descrição</th>
+      <th>Semestre</th>
+      <th>Qtd. atividades</th>
+      <th>Pontos planejados</th>
+      <th colspan="3"></th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sprints.order(:semester).each do |sprint| %>
+      <tr <%= "class=current_period" if Date.today.between?(sprint.inicio, sprint.fim) %>>
+
+        <td>
+          <%= sprint.description %>
+        </td>
+
+        <td>
+          <%= sprint.semester %>
+        </td>
+
+        <td>
+          <% activities = 0 %>
+          <% sprint.activities.each do |activity| %>
+            <% if current_user_total? %>
+              <% activities += 1 if activity.project_id == @project.id %>
+            <% else %>
+              <% if activity.project_id == @project.id &&
+                    activity.user_id == current_user.id %>
+                <% activities += 1 %>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <%= activities %>
+        </td>
+
+
+        <td>
+          <% pontos_cadastrados = 0 %>
+          <% sprint.activities.each do |activity| %>
+
+            <% if current_user_total? %>
+
+              <% if activity.project_id == @project.id %>
+                <% pontos_cadastrados += activity.pontos_cadastrados %>
+              <% end %>
+
+            <% else %>
+
+              <% if activity.project_id == @project.id &&
+                    activity.user_id == current_user.id %>
+                <% pontos_cadastrados += activity.pontos_cadastrados %>
+              <% end %>
+
+            <% end %>
+
+          <% end %>
+
+          <%= pontos_cadastrados %>
+        </td>
+
+        <td align="center">
+          <%= link_to "Visualizar", sprint_path(sprint, project: @project) %>
+        </td>
+
+        <% if can? :update, Sprint %>
+          <td width="100" align="center">
+            <%= link_to t('buttons.edit'), edit_sprint_path(sprint, project: @project) %>
+          </td>
+        <% end %>
+
+        <% if can? :destroy, Sprint %>
+          <td width="100" align="center">
+            <%= link_to t('buttons.destroy'), sprint_path(sprint, project: @project), method: :delete, data: { confirm: t('messages.confirm') } %>
+          </td>
+        <% end %>
+
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+
+<% if current_user_total? %>
+  <% if can? :create, Sprint %>
+    <%= link_to "Nova Sprint", new_sprint_path(project: @project), class: "btn btn-primary" %> |
+    <%= link_to "Nova Atividade", new_activity_path(project: @project), class: "btn btn-warning" %>
+  <% end %>
+<% else %>
+  <%= link_to "Nova Atividade", new_activity_path(project: @project), class: "btn btn-primary" %>
+<% end %>

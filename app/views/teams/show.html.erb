@@ -1,0 +1,86 @@
+<%= form_tag team_users_edit_multiple_path do %>
+
+  <div class="col-lg-9">
+    <div class="panel">
+
+      <div class="panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title"><center>Visualização da equipe</center></h3>
+        </div>
+      </div>
+
+      <div class="panel-body">
+        <span class="title">Descrição:</span> <%= @team.description %>
+
+        <br><br>
+        <%= hidden_field_tag "team_id", @team.id %>
+
+        <span class="title">Usuários:</span>
+        <ul>
+          <% @team.users.joins(:user_profile).order('user_profiles.name').each do |user| %>
+            <li><%= user.user_profile.name %></li>
+          <% end %>
+        </ul>
+
+        <hr style="border-top-color: dimgray;">
+        <span class="title">Projeto:</span> <br><br>
+
+        <table class="table table-striped table-hover ">
+
+          <thead>
+            <tr>
+
+              <th>Descrição</th>
+              <th>Qtd. sprints</th>
+              <th>Qtd. atividades</th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+            <% if @team.project.present? %>
+              <tr>
+
+                <td>
+                  <%= @team.project.description %>
+                </td>
+
+                <td>
+                  <%= @team.project.sprints.count %>
+                </td>
+
+                <td>
+                  <% activities_count = 0 %>
+                  <% @team.project.sprints.each do |sprint| %>
+
+                    <% if current_user_total? %>
+                      <% activities_count += sprint.activities.where(project_id: @team.project.id).count %>
+                    <% else %>
+                      <% activities_count += sprint.activities.where(user_id: current_user.id, project_id: @team.project.id).count %>
+                    <% end %>
+
+                  <% end %>
+
+                  <%= activities_count %>
+                </td>
+
+              </tr>
+            <% end %>
+          </tbody>
+
+        </table>
+
+        <br><br>
+
+        <% if can? :update, Team %>
+          <%= link_to t('buttons.edit'), edit_team_path, class: "btn btn-primary" %> |
+          <%= submit_tag "Editar usuários da equipe", class: "btn btn-default" %> |
+        <% end %>
+        <%= link_to t('buttons.back'),teams_path, class: "btn btn-success" %>
+
+      </div>
+
+    </div>
+  </div>
+
+<% end %>

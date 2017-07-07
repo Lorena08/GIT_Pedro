@@ -1,0 +1,48 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Criar Equipe</center></h3>
+      </div>
+    </div>
+
+
+    <div class="panel-body">
+      <%= form_for(@team, html: {class: 'form-horizontal'}) do |f| %>
+
+        <% if @team.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <h5><%= "Existe(m) #{pluralize(@team.errors.count, 'erro(s)')} no formulário:" %></h5>
+            <ul>
+            <% @team.errors.full_messages.each do |message| %>
+                <li><h6><%= message %></h6></li>
+            <% end %>
+            </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Descrição: </label>
+              <div class="col-lg-8">
+                <%= f.text_field :description, class: 'form-control' %>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+        <%= link_to t('buttons.back'), teams_path, class: "btn btn-success" %>
+
+      <% end %>
+    </div>
+
+  </div>
+</div>
+
+

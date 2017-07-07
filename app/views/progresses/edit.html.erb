@@ -1,0 +1,60 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Editar Completude</center></h3>
+      </div>
+    </div>
+
+
+    <div class="panel-body">
+
+      <%= form_for(@progress, html: {class: 'form-horizontal'}) do |f| %>
+
+        <% if @progress.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <p><h5> <%= "Existe(m) #{pluralize(@progress.errors.count, 'erro(s)')} no formulário:" %></h5></p>
+              <ul>
+              <% @progress.errors.full_messages.each do |message| %>
+                <li><h6><%= message %></h6></li>
+              <% end %>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <fieldset>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Completude: </label>
+            <div class="col-lg-2">
+              <%= f.number_field :completeness, min: 0, max: 100, step: 'any', class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Sprint: </label>
+            <div class="col-lg-3">
+              <span style="display: block; margin-top: 9px;">
+                <%= @progress.sprint.description %>
+              </span>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="form-group">
+            <div class="col-lg-8">
+              <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+              <%= link_to t('buttons.back'), progresses_path, class: "btn btn-success" %>
+            </div>
+          </div>
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>

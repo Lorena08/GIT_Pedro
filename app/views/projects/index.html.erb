@@ -1,0 +1,135 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Lista de projetos</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <br>
+
+      <table class="table table-striped table-hover ">
+
+        <thead>
+          <tr>
+
+            <th><center>Descrição</center></th>
+
+            <th><center>Equipe</center></th>
+
+            <th><center>Qtd. Sprints</center></th>
+
+            <th colspan="4"></th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @projects.each do |project| %>
+            <tr>
+
+              <td align="center">
+                <%= truncate(project.description, length: 20) %>
+              </td>
+
+              <td align="center">
+                <%= project.team.description %>
+              </td>
+
+              <td align="center">
+                <!-- Aparecer a quantidade exata de sprints no projeto, sem filtros -->
+                <%= project.sprints.count %>
+              </td>
+
+              <% unless current_user_total? %>
+
+                <%# VERIFICA SE EXISTE ALGUMA SPRINT EM ANDAMENTO %>
+                <% if project.sprints.where('inicio <= ? AND fim >= ?',
+                                            Date.today, Date.today).present? %>
+
+                  <%# RECUPERA A SEMANA CORRENTE DA SPRINT EM ANDAMENTO %>
+                  <% w_id = project.sprints.where('inicio <= ? AND fim >= ?', Date.today, Date.today).first.weeks.where('start_w <= ? AND end_w >= ?',Date.today, Date.today).first.id %>
+
+                  <%# VERIFICA SE EXISTE ALGUM REGISTRO DE HORA NESSA SEMANA
+                      DESSE USUÁRIO %>
+                  <% if HoursRegistry.where(
+                       user_id: current_user.id,
+                       week_id: w_id,
+                       project_id: project.id
+                       ).present? %>
+
+                    <%# VERIFICA SE O REGISTRO DE HORA ESTÁ COM O INÍCIO EM
+                        BRANCO %>
+                    <% if HoursRegistry.where(
+                         user_id: current_user.id,
+                         week_id: w_id,
+                         project_id: project.id
+                         ).first.start_hr.blank? %>
+
+                      <%# SE SIM, IMPRIME O LOGAR %>
+                      <td width="100" align="center">
+                        <%= link_to "Logar", project_login_path(project, week: w_id), method: 'post' %>
+                      </td>
+
+                    <% else %>
+
+                      <%# SE NÃO, IMPRIME O DESLOGAR %>
+                      <td width="100" align="center">
+                        <%= link_to "Deslogar", project_logout_path(project, week: w_id), method: 'put' %>
+                      </td>
+
+                    <% end %>
+
+                  <% else %>
+
+                    <%# SE NÃO, IMPRIME O LOGAR %>
+                    <td width="100" align="center">
+                      <%= link_to "Logar", project_login_path(project, week: w_id), method: 'post' %>
+                    </td>
+
+                  <% end %>
+
+                <% else %>
+
+                  <%# SE NÃO, IMPRIME O LOGAR 'NÃO PERMITIDO' %>
+                  <td width="100" align="center">
+                    <a style="cursor: not-allowed;">Logar</a>
+                  </td>
+
+                <% end %>
+
+              <% end %> <%# / UNLESS CURRENT_USER_TOTAL?  %>
+
+              <td width="100" align="center">
+                <%= link_to "Visualizar", project_path(project) %>
+              </td>
+
+              <% if can? :update, Project %>
+                <td width="100" align="center">
+                  <%= link_to t('buttons.edit'), edit_project_path(project) %>
+                </td>
+              <% end %>
+
+              <% if can? :destroy, Project %>
+                <td width="100" align="center">
+                  <%= link_to t('buttons.destroy'), project_path(project), method: :delete, data: { confirm: t('messages.confirm') } %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+
+      <center><%= paginate @projects %></center>
+
+      <% if can? :create, Project %>
+        <%= link_to t('buttons.new'), new_project_path, class: "btn btn-primary" %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

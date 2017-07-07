@@ -1,0 +1,72 @@
+<br/>
+<%= form_for(@sprint, html: { class: "basic-grey" }) do |f| %>
+
+  <h1><%= @sprint.model_name.human %></h1>
+
+  <% if @sprint.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= "#{pluralize(@sprint.errors.count, 'error')} #{t('messages.errors')}:" %></h2>
+
+      <ul>
+      <% @sprint.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description, row: 5 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :inicio %><br>
+    <% if params[:action] == 'edit' %>
+      <%= f.text_field :inicio, value: l(@sprint.inicio), class: 'datepicker', placeholder: 'dd/mm/aaaa' %>
+    <% else %>
+      <%= f.text_field :inicio, class: 'datepicker', placeholder: 'dd/mm/aaaa' %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :fim %><br>
+    <% if params[:action] == 'edit' %>
+      <%= f.text_field :fim, value: l(@sprint.fim), class: 'datepicker', placeholder: 'dd/mm/aaaa' %>
+    <% else %>
+      <%= f.text_field :fim, class: 'datepicker', placeholder: 'dd/mm/aaaa' %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :pontos_cadastrados %><br>
+    <%= f.number_field :pontos_cadastrados, min: 0, value: 0 %>
+  </div>
+
+  <%#= "#{params[:controller]}/#{params[:action]}" %>
+
+  <% if params[:action] == "edit" %>
+    <div class="field">
+      <%= f.label :pontos_atualizados %><br>
+      <%= f.text_field :pontos_atualizados %>
+    </div>
+  <% end %>
+
+  <br>
+
+  <div class="field">
+    <%= f.submit t('buttons.save'), class: "btn btn-primary" %>
+    <%= link_to t('buttons.back'), sprints_path, class: "btn btn-success"%>
+  </div>
+
+<% end %>
+
+<script>
+  $(document).ready(function(){
+    $('.datepicker').datepicker({
+      todayBtn: true,
+      language: "pt-BR",
+      todayHighlight: true
+    });
+  });
+</script>

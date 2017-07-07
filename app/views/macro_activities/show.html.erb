@@ -1,0 +1,57 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização da Macro Atividade</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb" style="background-color: #3e3b3b;">
+        <li><%= link_to "Projeto", project_path(@macro_activity.project) %></li>
+        <li class="active">Macro atividade</li>
+      </ul>
+
+      <span class="title">Descrição:</span> <%= @macro_activity.description %> <br>
+      <span class="title">Projeto:</span> <%= @macro_activity.project.description %> <br>
+
+      <div class="chart">
+
+        <% i = [] %>
+        <% (1..@macro_activity.progresses.count).each do |index| %>
+          <% i << index %>
+        <% end %>
+
+        <%= line_chart [
+          {name: "Completude",
+           data: @macro_activity.progresses
+                 .order(:id).map { |p| [p.id, p.completeness] }
+          },
+          {name: "Avanço",
+           data: @macro_activity.progresses
+                 .order(:id).map { |p| [p.id, p.advance] }
+          }
+          ], title: 'Macro Atividade', xtitle: 'Progresso', ytitle: 'Completude/Avanço (%)' %>
+
+      </div>
+
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newProgress">
+        Novo progresso
+      </button>
+
+      <br><br><br>
+
+      <% if can? :update, MacroActivity %>
+        <td width="100" align="center">
+          <%= link_to t('buttons.edit'), edit_macro_activity_path(@macro_activity), class: "btn btn-primary" %> |
+        </td>
+      <% end %>
+
+      <%= link_to t('buttons.back'), project_path(@macro_activity.project), class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

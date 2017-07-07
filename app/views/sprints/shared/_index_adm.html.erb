@@ -1,0 +1,66 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Lista de Sprints</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <table class="table table-striped table-hover ">
+
+        <thead>
+          <tr>
+            <th><%= @sprints.model.human_attribute_name("Descrição") %></th>
+            <th><%= @sprints.model.human_attribute_name("inicio") %></th>
+            <th><%= @sprints.model.human_attribute_name("fim") %></th>
+            <th><%= @sprints.model.human_attribute_name("pontos_cadastrados") %></th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @sprints.each do |sprint| %>
+            <tr>
+              <td><%= truncate(sprint.description, length: 20) %></td> <!-- trunca o tamanho para 10 -->
+              <td><%= l(sprint.inicio) %></td> <!-- l=locale (traducao) -> traduz datas, palavras -->
+              <td><%= l(sprint.fim) %></td>
+
+              <% pontos_cadastrados = 0 %>
+              <% sprint.activities.each do |activity| %>
+                <% pontos_cadastrados += activity.pontos_cadastrados %>
+              <% end %>
+
+              <td><%= pontos_cadastrados %></td>
+
+              <td width="100" align="center">
+                <%= link_to "Visualizar", sprint_path(sprint) %>
+              </td>
+
+              <% if can? :update, Sprint %>
+                <td width="100" align="center">
+                  <%= link_to t('buttons.edit'), edit_sprint_path(sprint) %>
+                </td>
+              <% end %>
+
+              <% if can? :destroy, Sprint %>
+                <td width="100" align="center">
+                  <%= link_to t('buttons.destroy'), sprint_path(sprint), method: :delete, data: { confirm: t('messages.confirm') } %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+
+      <center><%= paginate @sprints %></center>
+
+      <% if can? :create, Sprint %>
+        <%= link_to t('buttons.new'), new_sprint_path, class: "btn btn-primary" %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

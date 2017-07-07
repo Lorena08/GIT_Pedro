@@ -1,0 +1,86 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Editar status</center></h3>
+      </div>
+    </div>
+
+
+    <div class="panel-body">
+      <%= form_for(@status, html: {class: 'form-horizontal'}) do |f| %>
+
+        <% if @status.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <h5><%= "Existe(m) #{pluralize(@status.errors.count, 'erro(s)')} no formulário:" %></h5>
+            <ul>
+            <% @status.errors.full_messages.each do |message| %>
+                <li><h6><%= message %></h6></li>
+            <% end %>
+            </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <div class="panel-body">
+          <fieldset>
+
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Descrição: </label>
+              <div class="col-lg-8">
+                <%= f.text_field :description, class: 'form-control',
+                onchange: 'viewLabelText(this)' %>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-lg-2 control-label">Cor: </label>
+
+              <div class="col-lg-8">
+
+                <div class="col-lg-4" style="margin-left: -14px">
+                  <%= f.select(:color_id,
+                               Color.all.order(:description).collect {|c| [c.description, c.id ] },
+                               {},
+                               {class: "form-control",
+                                onchange: 'viewLabelColor(this)'}) %>
+                </div>
+
+                <div class="col-lg-8">
+                  <label class="col-lg-6 control-label">Pré-visualização: </label>
+                  <span id="view-color" class="label label-default col-lg-6" style="margin-top: 12px; padding: 4px">
+                    <%= @status.description %>
+                  </span>
+                </div>
+
+              </div> <!-- / .col-lg-8 -->
+
+            </div> <!-- / .form-group -->
+
+          </fieldset>
+        </div> <!-- / .panel-body -->
+
+      <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+      <%= link_to t('buttons.back'), statuses_path, class: "btn btn-success" %>
+
+    </div>
+  </div>
+
+<% end %>
+
+<script>
+  function viewLabelColor(element) {
+    var select = $(element)[0];
+    var color = select.item(select.selectedIndex).text
+    var span = $('#view-color')[0];
+    span.style = 'margin-top: 10px; padding: 4px; background-color: ' + color;
+  }
+  function viewLabelText(element) {
+    var input = $(element)[0];
+    var span = $('#view-color')[0];
+    span.innerText = input.value;
+  }
+</script>

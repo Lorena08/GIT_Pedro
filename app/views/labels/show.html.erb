@@ -1,0 +1,24 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização do rótulo</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <span class="title">Descrição:</span> <%= @label.description %> <br>
+      <span class="title">Cor:</span> <%= @label.color.blank? ? '-' : @label.color.description %>
+
+      <br><br><br>
+
+      <% if can? :update, Label %>
+        <%= link_to t('buttons.edit'), edit_label_path(@label), class: "btn btn-primary" %> |
+      <% end %>
+      <%= link_to t('buttons.back'), labels_path, class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="modal fade" id="newProgress" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" style="color: white !important; text-shadow: none !important;">x</button>
+        <h4 class="modal-title">Nova completude</h4>
+      </div>
+
+      <%= form_for(Progress.new, hmtl: { class: 'form-horizontal' }) do |f| %>
+        <div class="modal-body">
+
+          <%= f.hidden_field :project_id, value: project.id %>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Completude: </label>
+            <div class="col-lg-9">
+              <%= f.number_field :completeness, value: 0, min: 0, max: 100, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Sprint: </label>
+            <div class="col-lg-9">
+              <%= f.select(:sprint_id,
+                      project.sprints.order(semester: :desc).collect {|s| [ "#{s.description} (#{s.semester})", s.id ] },
+                      {selected: project.sprints.order(semester: :desc).last},
+                      {class: "form-control"}) %>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <%= f.submit t('buttons.save'), class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
+    </div>
+  </div>
+</div>

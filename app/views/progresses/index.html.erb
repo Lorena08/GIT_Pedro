@@ -1,0 +1,109 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização do Progresso</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <ul class="breadcrumb">
+        <div class="row">
+
+          <div class="col-lg-6 col-sm-6">
+            <li><%= link_to "Projeto", project_path(@project) %></li>
+            <li class="active">Progressos</li>
+          </div>
+
+          <div class="col-lg-6 col-sm-6">
+
+            <div class="progress progress-striped active" style="margin-bottom: 0" data-toggle="tooltip" data-placement="bottom" title="Completude do projeto">
+              <div class="progress-bar" style="width: <%= @project.progresses.last.completeness %>%">
+                <%= "#{@project.progresses.last.completeness}%" %>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </ul>
+
+      <br>
+
+      <table class="table table-striped table-hover">
+
+        <thead>
+          <tr>
+
+            <th>Sprint</th>
+
+            <th>Completude (%)</th>
+
+            <th>Avanço (%)</th>
+
+            <% if current_user_total? %>
+              <th colspan="2"></th>
+            <% end %>
+
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <% @project.progresses.order(:id).each do |progress| %>
+            <tr>
+
+              <td align="center">
+                <%= "#{progress.sprint.description} (#{progress.sprint.semester})" %>
+              </td>
+
+              <td align="center">
+                <%= progress.completeness %>
+              </td>
+
+              <td align="center">
+                <%= progress.advance %>
+              </td>
+
+              <% if can? :update, Progress %>
+                <td width="100">
+                  <%= link_to t('buttons.edit'), edit_progress_path(progress) %>
+                </td>
+              <% end %>
+
+              <% if can? :destroy, Progress %>
+                <td width="100">
+                  <%= link_to t('buttons.destroy'), progress_path(progress), method: :delete, data: { confirm: t('messages.confirm') } %>
+                </td>
+              <% end %>
+
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+
+      <br><br>
+
+      <% if can? :create, Progress %>
+        <%= link_to t('buttons.new'), new_progress_path(project: @project), class: 'btn btn-primary' %> |
+      <% end %>
+
+      <% if can? :manage, Progress %>
+        <%= link_to "Gráfico de C&A", progresses_graphic_path(project: @project), class: "btn btn-info" %> |
+      <% end %>
+
+      <%#= link_to t('buttons.back'), nil, class: "btn btn-success", onclick: 'goBack()' %>
+      <%= link_to t('buttons.back'), project_path(@project), class: "btn btn-success" %>
+
+    </div>
+  </div>
+</div>
+
+<!-- <script>
+  function goBack() {
+    window.history.back();
+  }
+</script> -->

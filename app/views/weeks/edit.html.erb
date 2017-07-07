@@ -1,0 +1,59 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Editar Semana</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <%= form_for(@week, html: {class: 'form-horizontal'}) do |f| %>
+
+        <%= hidden_field_tag("project", @project) %>
+
+        <% if @week.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <p><h5> <%= "Existe(m) #{pluralize(@week.errors.count, 'erro(s)')} no formulário:" %></h5></p>
+              <ul>
+              <% @week.errors.full_messages.each do |message| %>
+                <li><h6><%= message %></h6></li>
+              <% end %>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <fieldset>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Horas esperadas: </label>
+            <div class="col-lg-2">
+              <%= f.number_field :expected_hours, class: 'form-control', step: 'any' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-2 control-label">Horas realizadas: </label>
+            <div class="col-lg-3">
+              <%= hidden_field :hours_registry, :id, value: @hours_registry.id %>
+              <%= text_field :hours_registry, :hours_performed, class: 'form-control', step: 'any' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-8 col-lg-offset-2">
+              <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+              <%= link_to t('buttons.back'), sprint_path(@week.sprint, project_id: @project), class: "btn btn-success" %>
+            </div>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>

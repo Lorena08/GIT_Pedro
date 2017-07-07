@@ -1,0 +1,82 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Visualização do usuário</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <table class="table table-striped ">
+
+        <thead>
+          <tr>
+            <th colspan="4">
+              <center>
+
+                <div class="paperclip-div">
+                  <%= image_tag @user.user_profile.picture.url, class: 'paperclip-img' %>
+                </div>
+
+                <span style="margin-left: 20px; font-size: 16pt; ">
+                  <%= @user.user_profile.name %>
+                </span>
+
+              </center>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+
+            <td>
+              <center>
+                <b>E-mail:</b> <%= @user.email %>
+              </center>
+            </td>
+
+            <td>
+              <center>
+                <b>Matrícula:</b> <%= @user.user_profile.student_number %>
+              </center>
+            </td>
+
+            <td>
+              <center>
+                <b>Acesso:</b> <%= @user.user_profile.role %>
+              </center>
+            </td>
+
+            <td>
+              <center>
+                <b>Equipes:</b>
+
+                <% @user.teams.each do |team| %>
+
+                  <% if team == @user.teams.last %>
+                    <%= team.description %>
+                  <% else %>
+                    <%= team.description %>,
+                  <% end %>
+
+                <% end %>
+
+              </center>
+            </td>
+
+          </tr>
+        </tbody>
+
+      </table>
+
+      <br>
+
+      <%= link_to t('buttons.edit'), edit_user_profile_path(@user), class: "btn btn-primary" %> |
+      <%= link_to t('buttons.back'),user_profile_index_path, class: "btn btn-success" %>
+
+    </div>
+
+  </div>
+</div>

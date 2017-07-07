@@ -1,0 +1,85 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Editar usuários da equipe</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+      <%= form_for(:team_user, url: team_users_update_multiple_path, html: { class: 'form-horizontal', method: :put }) do |f| %>
+
+        <%= hidden_field_tag("team_id", @team.id) %>
+
+        <fieldset>
+
+          <legend>Equipe: <%= @team.description %></legend>
+
+          <br>
+          <% for user in @team.users %>
+
+            <div class="form-group">
+              <%= hidden_field_tag "users_id[]", user.id %>
+
+              <div class="col-lg-6 col-lg-offset-1">
+                <%= f.select("users_id[]",
+                        User.all.joins(:user_profile).order('user_profiles.name').collect {|u| [ u.user_profile.name, u.id ] },
+                        {selected: user.id},
+                        {onchange: 'users_ids(this)', class: "form-control"}) %>
+              </div>
+
+              <div class="col-lg-2">
+                <a class="btn btn-default" onclick="removeSelect(this)">
+                  Remover
+                </a>
+              </div>
+
+            </div>
+
+          <% end %>
+
+          <span id="add"></span>
+
+
+          <br>
+          <div class="form-group">
+            <div class="col-lg-2 col-lg-offset-1">
+              <a class="btn btn-default" onclick="addSelect(this)">Adicionar</a>
+            </div>
+          </div>
+
+
+          <br/><br/>
+          <div class="form-group">
+            <div class="col-lg-10">
+              <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+              <%= link_to t('buttons.back'), teams_path, class: "btn btn-success"%>
+            </div>
+          </div>
+
+        </fieldset>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  function users_ids(select){
+    var selectedIndex = select.options.selectedIndex;
+    var value = select.options[selectedIndex].value;
+    var hidden_field = select.closest('div.form-group').firstElementChild;
+    hidden_field.value = value;
+  };
+
+  function removeSelect(link){
+    var div = link.closest('div.form-group');
+
+    confirm('Tem certeza?') ? div.remove() : "";
+    // div.remove();
+  };
+
+  function addSelect(link){
+    $('#add').replaceWith("<%= j (render ('select_team_users')) %>");
+  };
+</script>

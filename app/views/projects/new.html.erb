@@ -1,0 +1,112 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Criar projeto</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <%= form_for(@project, html: { class: 'form-horizontal' }) do |f| %>
+
+        <% if @project.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <p>
+                <h5> Existe(m) <%= @project.errors.count %> erro(s) no formulário:</h5>
+              </p>
+              <ul>
+                <% @project.errors.full_messages.each do |message| %>
+                    <li><h6><%= message %></h6></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <fieldset>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Descrição: </label>
+            <div class="col-lg-7">
+              <%= f.text_field :description, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Equipe: </label>
+            <div class="col-lg-7">
+              <%= f.select(:team_id,
+                           Team.all.collect {|t| [ t.description, t.id ] },
+                           {},
+                           {class: 'form-control'}) %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <hr>
+            <h5 class=" col-lg-2 col-lg-offset-2">Sprint(s)</h5>
+          </div>
+
+          <div class="form-group">
+            <%= hidden_field_tag  "sprint_ids[]" %>
+
+            <div class="col-lg-6 col-lg-offset-2">
+              <%= f.select("sprint_ids",
+                         Sprint.all.collect {|s| [ truncate(s.description, length: 55), s.id ] },
+                         {include_blank: '-- Selecione um sprint --'},
+                         {onchange: 'sprint_ids(this)', class: "form-control"}) %>
+            </div>
+
+            <div class="col-lg-2">
+              <a onclick='removeSelect(this)' class="btn btn-default">Remover</a>
+            </div>
+
+          </div>
+
+          <span id="add"></span>
+
+
+          <br>
+          <div class="form-group">
+            <div class="col-lg-2 col-lg-offset-2">
+              <a class="btn btn-default" onclick="addSelect(this)">Adicionar</a>
+            </div>
+          </div>
+
+          <br>
+
+          <div class="col-lg-7">
+            <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+            <%= link_to t('buttons.back'), projects_path, class: "btn btn-success"%>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function sprint_ids(select){
+    var selectedIndex = select.options.selectedIndex;
+    var value = select.options[selectedIndex].value;
+    var hidden_field = select.closest('div.form-group').firstElementChild;
+    hidden_field.value = value;
+  };
+
+  function removeSelect(link){
+    var div = link.closest('div.form-group');
+
+    confirm('Tem certeza?') ? div.remove() : "";
+    // div.remove();
+  };
+
+  function addSelect(link){
+    $('#add').replaceWith("<%= j (render partial: ('projects/shared/select_sprints')) %>");
+  };
+</script>

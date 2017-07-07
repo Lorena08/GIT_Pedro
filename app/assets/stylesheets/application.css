@@ -1,0 +1,197 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require scaffolds
+ *= require bootstrap
+ *= require bootstrap-datepicker3
+ *= require_tree .
+ *= require_self
+ *= require jquery.minicolors
+ */
+
+@import 'bootstrap/glyphicons';
+
+@media (min-width: 1200px) {
+    .sprint-date {
+        margin-bottom: 15px;
+    }
+}
+
+tr.current_period > td {
+    background-color: rgba(42, 159, 214, 0.56) !important;
+}
+
+.breadcrumb {
+    background-color: #3e3b3b !important;
+}
+.breadcrumb > .row > .col-lg-5.col-sm-5 > li,
+.breadcrumb > .row > .col-lg-6.col-sm-6 > li {
+    display: inline-block;
+}
+.breadcrumb > .row > .col-lg-6.col-sm-6 > li + li::before,
+.breadcrumb > .row > .col-lg-5.col-sm-5 > li + li::before {
+    color: #ccc;
+    content: "/ ";
+    padding: 0 5px;
+}
+
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    font-style: italic !important;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+   font-style: italic !important;
+   opacity:  1;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+   font-style: italic !important;
+   opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   font-style: italic !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+   font-style: italic !important;
+}
+
+.modal {
+    text-align: center;
+}
+.modal::before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
+}
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    width: 300px !important;
+}
+
+.chart {
+    background-color: white;
+    margin: 20px;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+th, td {
+    text-align: center !important;
+}
+
+.field_with_errors {
+  box-shadow: 0 0 10px red;
+}
+
+.color-description {
+    margin-right: 10px;
+    padding: 5px 13px;
+    border-radius: 5px;
+}
+
+.title {
+    font-size: 14pt;
+    color: white;
+}
+
+/* Dropdown no asidebar */
+.asidebar-content {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 600ms, visibility 600ms;
+}
+.asidebar-content-active {
+    position: static;
+    visibility: visible;
+    opacity: 1;
+}
+.asidebar-content li:hover, .asidebar-content-active li:hover {
+    background-color: #3e3b3b;
+    border-radius: 5px;
+}
+.asidebar-content a, .asidebar-content-active a {
+    text-decoration: none !important;
+    padding: 2% 95% 2% 0;
+}
+.asidebar-content li, .asidebar-content-active li {
+    padding: 10px 20px;
+}
+.asidebar-dropdown {
+    overflow: hidden;
+}
+.asidebar-dropdown:hover .asidebar-content {
+    position: static;
+    visibility: visible;
+    opacity: 1;
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus,
+.asidebar-content-active .active {
+    color: #ffffff;
+    background-color: #2a9fd6 !important;
+    border-radius: 5px;
+}
+.nav-pills > li > a:hover {
+    background-color: #3e3b3b !important;
+}
+
+/* Alinhar div do formulário do Devise no meio */
+.outer {
+    display: flex;
+}
+.inner {
+    align-self: center;
+    margin: auto;
+}
+
+/* Configuração para o corte da foto no perfil do usuário */
+.paperclip-div {
+    border-radius: 100px; /* deixar borda arredondada */
+    box-shadow: 0 0 10px black; /* sombreamento da imagem */
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+ }
+.paperclip-img {
+    align-self: center;
+    height: 100px;
+}
+
+/* Datepicker */
+.datepicker tfoot tr th:hover,
+.datepicker table tr td.day:hover, .datepicker table tr td.focused,
+.datepicker .datepicker-switch:hover, .datepicker .prev:hover,
+.datepicker .next:hover, .datepicker tfoot tr th:hover {
+    background: #3e3b3b;
+}
+td.disabled.disabled-date.day:hover {
+    background: none;
+}
+input[readonly]{
+    cursor: pointer !important;
+    background: white !important;
+}
+
+/* Kaminari */
+.pagination>li>a {
+    background-color: #181818 !important;
+    border-color: #3e3b3b !important;
+}
+.pagination>.active>a {
+    background-color: #2a9fd6 !important;
+    border-color: #2a9fd6 !important;
+}

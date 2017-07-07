@@ -1,0 +1,67 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Lista de Sprints</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+        <% @projects.each do |project| %>
+
+          <span class="title">Projeto: </span> <%= project.description %>
+          <br>
+          <span class="title">Equipe: </span> <%= project.team.description %>
+          <br><br>
+          <span class="title">Sprints:</span>
+
+          <br><br>
+
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Inicio</th>
+                <th>Fim</th>
+                <th>Pontos Cadastrados</th>
+                <th width="150"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% project.sprints.each do |sprint| %>
+                <tr>
+                  <td><%= truncate(sprint.description, length: 20) %></td> <%# trunca o tamanho para 10 %>
+                  <td><%= l(sprint.inicio) %></td> <%#l=locale (traducao) -> traduz datas, palavras %>
+                  <td><%= l(sprint.fim) %></td>
+
+                  <% pontos_cadastrados = 0 %>
+                  <% sprint.activities.each do |activity| %>
+                    <% if activity.project.id == project.id %>
+                      <% pontos_cadastrados += activity.pontos_cadastrados %>
+                    <% end %>
+                  <% end %>
+
+                  <td><%= pontos_cadastrados %></td>
+
+                  <td align="center">
+                    <%= link_to "Visualizar", sprint_path(sprint, project: project) %>
+                  </td>
+
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+          <% unless project == @projects.last %>
+            <hr style="border-top-color: dimgray;"><br>
+          <% end %>
+        <% end %>
+
+      <center><%= paginate @projects %></center>
+
+    </div>
+  </div>
+</div>

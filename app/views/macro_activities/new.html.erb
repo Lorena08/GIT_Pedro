@@ -1,0 +1,60 @@
+<div class="col-lg-9">
+  <div class="panel">
+
+    <div class="panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title"><center>Nova macro atividade</center></h3>
+      </div>
+    </div>
+
+    <div class="panel-body">
+
+      <%= form_for(@macro_activity, html: { class: 'form-horizontal' }) do |f| %>
+
+        <% if @macro_activity.errors.any? %>
+          <div id="error_explanation">
+            <div class="alert alert-dismissible alert-danger">
+              <p>
+                <h5> Existe(m) <%= @macro_activity.errors.count %> erro(s) no formulário:</h5>
+              </p>
+              <ul>
+                <% @macro_activity.errors.full_messages.each do |message| %>
+                    <li><h6><%= message %></h6></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+          <br>
+        <% end %>
+
+        <fieldset>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Descrição: </label>
+            <div class="col-lg-7">
+              <%= f.text_field :description, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-lg-3 control-label">Projeto: </label>
+
+            <%= f.hidden_field :project_id, value: @project.id %>
+            <span style="display: block; margin-top: 9px;">
+              <%= @project.description %>
+            </span>
+          </div>
+
+          <br>
+
+          <div class="col-lg-7">
+            <%= f.submit t('buttons.save'), class: "btn btn-primary" %> |
+            <%= link_to t('buttons.back'), project_path(@project), class: "btn btn-success"%>
+          </div>
+
+        </fieldset>
+      <% end %>
+
+    </div>
+  </div>
+</div>

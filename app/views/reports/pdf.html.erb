@@ -1,0 +1,16 @@
+<div class="chart">
+
+  <%= line_chart [
+    {name: "Completude",
+     data: @project.progresses
+           .order(:id).map { |p| [[p.sprint.description + " (#{p.sprint.semester})"], p.completeness] }
+    },
+    {name: "Avanço",
+     data: @project.progresses
+           .order(:id).map { |p| [[p.sprint.description + " (#{p.sprint.semester})"], p.advance] }
+    }
+    ], title: "#{@project.description}", xtitle: 'Sprints', ytitle: 'Completude/Avanço (%)' %>
+
+</div>
+
+teste

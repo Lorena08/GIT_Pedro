@@ -1,0 +1,64 @@
+<br/>
+<%= form_for(@project, html: { class: "basic-grey" }) do |f| %>
+
+  <h1>
+    Novo Projeto
+  </h1>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+
+  <div class="field">
+    <label>Equipe</label>
+    <%= f.select(:team_id,
+                 Team.all.collect {|t| [ t.description, t.id ] },
+                 {selected: @project.team_id}) %>
+
+  </div>
+
+  <label>Sprint(s)</label>
+  <% for sprint in @project.sprints %>
+    <div class="field">
+      <%= hidden_field_tag  "sprint_ids[]", sprint.id %>
+      <%= f.select("sprint_ids[]",
+                 Sprint.all.collect {|s| [ truncate(s.description, length: 55), s.id ] },
+                 {selected: sprint.id},
+                 {onchange: 'sprint_ids(this)'}) %>
+      <a href="#" class="btn btn-default" onclick="removeSelect(this)">Remover</a>
+      <br>
+    </div>
+  <% end %>
+
+  <span id="add"></span>
+
+  <a href="#" class="btn btn-default" onclick="addSelect(this)">Adicionar</a>
+
+  <br><br>
+
+  <div class="field">
+    <%= f.submit t('buttons.save'), class: "btn btn-primary" %>
+    <%= link_to t('buttons.back'), project_path(@project), class: "btn btn-success"%>
+  </div>
+
+<% end %>
+
+<script>
+  function sprint_ids(select){
+    var selectedIndex = select.options.selectedIndex;
+    var value = select.options[selectedIndex].value;
+    var hidden_field = select.closest('div.field').firstElementChild;
+    hidden_field.value = value;
+  };
+
+  function removeSelect(link){
+    var div = link.closest('div.field');
+
+    confirm('Tem certeza?') ? div.remove() : "";
+  };
+
+  function addSelect(link){
+    $('#add').replaceWith("<%= j (render ('select_sprints')) %>");
+  };
+</script>

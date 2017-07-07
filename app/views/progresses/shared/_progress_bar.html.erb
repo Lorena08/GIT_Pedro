@@ -1,0 +1,9 @@
+<div class="col-lg-6 col-sm-6">
+
+  <div class="progress progress-striped active" style="margin-bottom: 0" data-toggle="tooltip" data-placement="bottom" title="Completude do projeto">
+    <div class="progress-bar" style="width: <%= @project.progresses.last.completeness %>%">
+      <%= "#{@project.progresses.last.completeness}%" %>
+    </div>
+  </div>
+
+</div>

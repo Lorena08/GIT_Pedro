@@ -1,0 +1,8 @@
+pt-BR:
+  messages:
+    confirm: Tem certeza que deseja excluir?
+    listing: Listando
+    errors: ocorreram
+    created: Item criado com sucesso!
+    updated: Item atualizado com sucesso!
+    destroyed: Item excluído com sucesso!

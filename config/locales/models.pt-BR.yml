@@ -1,0 +1,15 @@
+pt-BR:
+  activerecord:
+    models:
+      user: Usuário
+      team: Equipe
+    attributes:
+      user:
+        name: Nome
+        email: E-mail
+        password: Senha
+        confirmation_password: Confirme sua senha
+        student_number: Matrícula
+        access: Acesso
+      team:
+        description: Descrição
